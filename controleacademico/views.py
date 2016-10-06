@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .import models
 from .tables import ProfessorTable
+from .tables import TurmaTable
 
 def index(request):
     queryset = models.Professor.objects.all()
@@ -10,9 +11,8 @@ def index(request):
 def disciplinas(request):
     return render(request, 'disciplinas.html')
 
-"""""
-def teste(request):
-    professores = models.Professor.objects.all()
 
-    return render(request,'index.html', {'professores':professores})
-"""
+def professor(request):
+    queryset = models.Turma.objects.all()
+    table = TurmaTable(queryset)
+    return render(request, 'professor.html', {'table':table})
