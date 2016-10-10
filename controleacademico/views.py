@@ -3,6 +3,7 @@ from django.shortcuts import render
 from .models import Professor
 from .models import Aluno
 from .models import Boletim
+from .models import Turma
 from .models import Disciplina
 from .tables import ProfessorTable
 from .tables import BoletimTable
@@ -12,16 +13,16 @@ import json
 
 def professor(request):
     professores = Professor.objects.all()
-    disciplinas = Disciplina.objects.all()
+    turmas = Turma.objects.all()
     profesorlogado = request.user
-    disciplinasProfessor = []
+    turmasProfessor = []
     for professor in professores:
         if professor.user == request.user:
             matricula = professor.matricula
-            for i in range(len(disciplinas)):
-                if disciplinas[i].professor.user == profesorlogado:
-                    disciplinasProfessor.append(disciplinas[i])
-            return render(request, 'professor.html', {'disciplinasProfessor': disciplinasProfessor, 'matricula': matricula})
+            for i in range(len(turmas)):
+                if turmas[i].professor.user == profesorlogado:
+                    turmasProfessor.append(turmas[i])
+            return render(request, 'professor.html', {'turmasProfessor': turmasProfessor, 'matricula': matricula})
     return render(request, 'acessonegado.html')
 
 
@@ -75,7 +76,6 @@ def graficoDesenpenho(request):
     disiplinas = Disciplina.objects.all()
     data = ['X', 'Y', 'Z'];
     data1 = [1, 2, 3];
-    data2 = [4, 5, 6];
 
     media = 0.0
     historico = []
@@ -86,7 +86,7 @@ def graficoDesenpenho(request):
 
         media = 0.0
 
-    return render(request,'graficoDesenpenho.html', {'data':json.dumps(data), 'data1':json.dumps(data1), 'data2':json.dumps(data2)})
+    return render(request,'graficoDesenpenho.html', {'data':json.dumps(data), 'data1':json.dumps(data1)})
 
 
 def acessonegado(request):

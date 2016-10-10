@@ -8,12 +8,10 @@
       function drawStuff() {
           var test = JSON.parse('{{data|safe}}')
           var tefdgst = JSON.parse('{{data1|safe}}')
-          var tegretest = JSON.parse('{{data2|safe}}')
         var data = new google.visualization.arrayToDataTable([
           ['Move', 'percent'],
           [test[0], 44],
-          [tefdgst[0], 12],
-          [tegretest[0], 10]
+          [tefdgst[0], 12]
         ]);
 
         var options = {

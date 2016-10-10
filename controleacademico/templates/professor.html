@@ -22,11 +22,11 @@
     <div style="margin-left: 30px;">
         <h2>Matrícula: {{ matricula }}</h2>
         <div class="clear" style="margin-top: 10px;"></div>
-        <h2>Disciplinas:</h2>
+        <h2>Turmas:</h2>
         <div class="clear" style="margin-top: 10px;"></div>
-        {% for disciplina in disciplinasProfessor %}
+        {% for turma in turmasProfessor %}
             <div style="margin-left: 20px;">
-                <h3><p><a href="{% url 'disciplinas' pk=disciplina.pk %}">{{ disciplina.nome }}</a></p></h3>
+                <h3><p><a href="{% url 'disciplinas' pk=turma.pk %}">{{ turma.nome }}</a></p></h3>
             </div>
         {% endfor %}
     </div>
