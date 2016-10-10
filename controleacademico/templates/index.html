@@ -1,16 +1,44 @@
 {% extends "base.html" %}
-{% load django_tables2 %}
 {% load static %}
 
-{% block extrahead %}
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="{% static 'django_tables2/bootstrap.css' %}" rel="stylesheet" />
-{% endblock %}
 {% block body %}
-    <div class="container">
-        <h1>Controle Acadêmico</h1>
-        <p>Sistema de gerenciamento de informações acadêmicas.</p>
-        <h2>Professores</h2>
-        {% render_table table "django_tables2/bootstrap.html" %}
-    </div>
+
+<div class="clear" style="margin-top: 10px;"></div>
+
+<div>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" style=" margin-right: 20px;" href="{% url 'professor' %}">PROFESSOR</a>
+                <a class="navbar-brand" style=" margin-right: 20px;" href="{% url 'aluno' %}">ALUNO</a>
+            </div>
+        </div>
+    </nav>
+
+    <h3 style="margin-left: 30px; margin-top: 30px; margin-bottom: 30px">Seja Bem-Vindo!!</h3>
+
+
+
+
+</div>
+
 {% endblock %}
+
+
+
+
+<!--
+{% if professor_list %}
+    <ul>
+    {% for professor in professor_list %}
+        <li>
+            <a>{{ professor.matricula }}</a>
+            <a href="/home/turmaDetalhes/{{ professor.id }}/">{{ professor.nome }}</a>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Nenhum Professor localizado!</p>
+{% endif %}
+-->

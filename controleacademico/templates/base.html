@@ -1,10 +1,22 @@
 {% load static %}
 
-<!DOCTYPE html>
 <html lang="en">
-<head>
-        <title>django-tables2 examples</title>
+
+    <head>
+
+        <title>Controle Acadêmico</title>
+
         <link rel="stylesheet" type="text/css" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="{% static 'django_tables2/bootstrap.css' %}" rel="stylesheet" />
+
+        {% block extrahead %}
+            <div class="container" style="margin-left: 0px;">
+                <h1>Controle Acadêmico</h1>
+                <p>Sistema de gerenciamento de informações acadêmicas.</p>
+            </div>
+        {% endblock %}
+
         <style type="text/css">
             pre {
                 background-color: #D8F0FF;
@@ -12,7 +24,7 @@
                 padding: 8px;
             }
         </style>
-        {% block extrahead %}{% endblock %}
+
     </head>
 
     <body>
@@ -20,5 +32,7 @@
         {% load django_tables2 %}
         {% render_table table %}
         {% endblock %}
+
     </body>
+
 </html>

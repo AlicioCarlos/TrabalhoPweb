@@ -18,19 +18,11 @@ class Professor(models.Model):
 
 class Disciplina(models.Model):
     nome = models.CharField(max_length=100)
-    cargaHoraria = models.IntegerField()
+    professor = models.ForeignKey(Professor)
+    alunos = models.ManyToManyField(Aluno, through='Boletim')
 
     def __str__(self):
         return self.nome
-
-class Turma(models.Model):
-    codigo = models.CharField(max_length=20)
-    professor = models.ForeignKey(Professor)
-    disciplina = models.ForeignKey(Disciplina)
-    alunos = models.ManyToManyField(Aluno)
-
-    def __str__(self):
-        return self.codigo
 
 class Boletim(models.Model):
     aluno = models.ForeignKey(Aluno)
@@ -40,7 +32,7 @@ class Boletim(models.Model):
     nota3 = models.FloatField()
 
     def __str__(self):
-        return self.aluno
+        return str(self.aluno) + " " + str(self.disciplina)
 
     def media(self):
         return (self.nota1 + self.nota2 + self.nota3)/3

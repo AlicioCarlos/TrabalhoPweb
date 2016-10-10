@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load django_tables2 %}
+{% load static %}
+
+{% block extrahead %}
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="{% static 'django_tables2/bootstrap.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block body %}
+    <div class="container">
+        <h1>Controle Acadêmico</h1>
+        <p>Sistema de gerenciamento de informações acadêmicas.</p>
+        <h2>Alunos</h2>
+        {% render_table table "django_tables2/bootstrap.html" %}
+    </div>
+{% endblock %}

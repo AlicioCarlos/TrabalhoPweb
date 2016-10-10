@@ -13,17 +13,20 @@
                 <div class="navbar-header">
                     <a class="navbar-brand" style="margin-right: 5px;" href="{% url 'index' %}">HOME</a>
                     <a class="navbar-brand" style="margin-right: 20px;">|</a>
-                    <a class="navbar-brand" style="margin-right: 20px;" href="{% url 'professor' %}">VOLTAR</a>
+                    <a class="navbar-brand" style="margin-right: 20px;" href="{% url 'aluno' %}">VOLTAR</a>
                 </div>
             </div>
         </nav>
 
         <div class="=clear"></div>
 
-    <div style="margin-left: 30px;">
-         <h2>{{disciplinaNome}}</h2>
-        {% render_table table "django_tables2/bootstrap.html" %}
-    </div>
+        <div style="margin-left: 30px;">
+            <p><h2>Boletim:</h2></p>
+
+            <div style="margin-top: 10px;">
+                {% render_table table "django_tables2/bootstrap.html" %}
+            </div>
+        </div>
 
     </div>
 
