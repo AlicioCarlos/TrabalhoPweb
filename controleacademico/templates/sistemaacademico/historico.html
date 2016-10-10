@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "sistemaacademico/base.html" %}
 {% load django_tables2 %}
 {% load static %}
 
@@ -18,14 +18,17 @@
             </div>
         </nav>
 
-        <div class="=clear"></div>
-
         <div style="margin-left: 30px;">
-            <p><h2>Boletim:</h2></p>
-
-            <div style="margin-top: 10px;">
-                {% render_table table "django_tables2/bootstrap.html" %}
-            </div>
+            <h2>HISTÓRICO:</h2>
+            <div class="clear" style="margin-top: 10px;"></div>
+            <h2>Disciplinas Cursadas:</h2>
+            <div class="clear"></div>
+            {% for key, value in historico.items %}
+                <div style="margin-left: 10px;">
+                    <h3><p>{{ key }}</p></h3>
+                    <h4><p>Média: {{ value }}</p></h4>
+                </div>
+            {% endfor %}
         </div>
 
     </div>

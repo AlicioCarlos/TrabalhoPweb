@@ -6,12 +6,20 @@
       google.charts.setOnLoadCallback(drawStuff);
 
       function drawStuff() {
-          var test = JSON.parse('{{data|safe}}')
+
+          var test = JSON.parse({{data|safe}})
           var tefdgst = JSON.parse('{{data1|safe}}')
+
+          {%for materia in materias%}
+                disc = '{{materia}}'
+                data.addRows([[disc, notaAvg[i]]])
+                 i++
+            {%endfor%}
+
         var data = new google.visualization.arrayToDataTable([
           ['Move', 'percent'],
           [test[0], 44],
-          [tefdgst[0], 12]
+          [tefdgst[0], 12],
         ]);
 
         var options = {

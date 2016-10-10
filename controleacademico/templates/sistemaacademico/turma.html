@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "sistemaacademico/base.html" %}
 {% load django_tables2 %}
 {% load static %}
 
@@ -10,7 +10,8 @@
     <div class="container">
         <h1>Controle Acadêmico</h1>
         <p>Sistema de gerenciamento de informações acadêmicas.</p>
-        <h2>Alunos</h2>
+        <h2>Turmas</h2>
         {% render_table table "django_tables2/bootstrap.html" %}
+        <a href="disciplinas">Alunos</a>
     </div>
 {% endblock %}

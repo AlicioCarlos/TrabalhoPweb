@@ -22,8 +22,8 @@ def professor(request):
             for i in range(len(turmas)):
                 if turmas[i].professor.user == profesorlogado:
                     turmasProfessor.append(turmas[i])
-            return render(request, 'professor.html', {'turmasProfessor': turmasProfessor, 'matricula': matricula})
-    return render(request, 'acessonegado.html')
+            return render(request, 'sistemaacademico/professor.html', {'turmasProfessor': turmasProfessor, 'matricula': matricula})
+    return render(request, 'sistemaacademico/acessonegado.html')
 
 
 def aluno(request):
@@ -37,8 +37,8 @@ def aluno(request):
             for i in range(len(boletins)):
                 if boletins[i].aluno.user == alunologado:
                     boletimAluno.append(boletins[i])
-            return render(request,'aluno.html', {'boletimAluno': boletimAluno, 'matricula': matricula})
-    return render(request, 'acessonegado.html')
+            return render(request, 'sistemaacademico/aluno.html', {'boletimAluno': boletimAluno, 'matricula': matricula})
+    return render(request, 'sistemaacademico/acessonegado.html')
 
 
 def boletimDoAluno(request):
@@ -50,7 +50,7 @@ def boletimDoAluno(request):
             alunoPK  = aluno.pk
     boletimAluno = Boletim.objects.filter(aluno = alunoPK)
     table = BoletimTable(boletimAluno.all())
-    return render(request, 'boletim.html', {'table':table})
+    return render(request, 'sistemaacademico/boletim.html', {'table':table})
 
 
 def historicoDoAluno(request):
@@ -63,13 +63,13 @@ def historicoDoAluno(request):
             for i in range(len(boletins)):
                 if boletins[i].aluno.user == alunologado:
                     historico[boletins[i].disciplina.nome] = boletins[i].media
-    return render(request,'historico.html', {'historico':historico})
+    return render(request, 'sistemaacademico/historico.html', {'historico':historico})
 
 
 def disciplinas(request, pk):
     disciplinas = Disciplina.objects.get(pk=pk)
     table = AlunoTable(disciplinas.alunos.all())
-    return render(request,'disciplinas.html', {'table' : table, 'disciplinaNome': disciplinas.nome})
+    return render(request, 'sistemaacademico/disciplinas.html', {'table' : table, 'disciplinaNome': disciplinas.nome})
 
 def graficoDesenpenho(request):
     boletins = Boletim.objects.all()
@@ -86,16 +86,18 @@ def graficoDesenpenho(request):
 
         media = 0.0
 
-    return render(request,'graficoDesenpenho.html', {'data':json.dumps(data), 'data1':json.dumps(data1)})
+    return render(request, 'sistemaacademico/graficoDesenpenho.html', {'data':json.dumps(data), 'data1':json.dumps(data1)})
 
 
 def acessonegado(request):
-    return render(request,'acessonegado.html')
+    return render(request, 'sistemaacademico/acessonegado.html')
+
+
 
 
 @login_required
 def index(request):
-        return render(request, 'index.html', {})
+        return render(request, 'sistemaacademico/index.html', {})
 
 """""
 def index(request):
