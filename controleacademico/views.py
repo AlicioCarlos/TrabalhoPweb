@@ -74,9 +74,6 @@ def disciplinas(request, pk):
 def graficoDesenpenho(request):
     boletins = Boletim.objects.all()
     disiplinas = Disciplina.objects.all()
-    data = ['X', 'Y', 'Z'];
-    data1 = [1, 2, 3];
-
     media = 0.0
     historico = []
     for disiplina in disiplinas:
@@ -86,14 +83,11 @@ def graficoDesenpenho(request):
 
         media = 0.0
 
-    return render(request, 'sistemaacademico/graficoDesenpenho.html', {'data':json.dumps(data), 'data1':json.dumps(data1)})
+    return render(request, 'sistemaacademico/graficoDesenpenho.html', {'disiplinas':disiplinas})
 
 
 def acessonegado(request):
     return render(request, 'sistemaacademico/acessonegado.html')
-
-
-
 
 @login_required
 def index(request):

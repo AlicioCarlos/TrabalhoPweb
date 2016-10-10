@@ -1,47 +1,50 @@
 <html>
-  <head>
+<head>
+    <title>Desempenho</title>
+    <h2>Gráfico de desempenho</h2>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load('current', {'packages':['bar']});
       google.charts.setOnLoadCallback(drawStuff);
 
-      function drawStuff() {
+    function drawStuff() {
 
-          var test = JSON.parse({{data|safe}})
-          var tefdgst = JSON.parse('{{data1|safe}}')
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'disciplina');
+      data.addColumn('number', 'Media_Notas');
 
-          {%for materia in materias%}
-                disc = '{{materia}}'
-                data.addRows([[disc, notaAvg[i]]])
-                 i++
-            {%endfor%}
+      var disc = ""
+      var i = 0
 
-        var data = new google.visualization.arrayToDataTable([
-          ['Move', 'percent'],
-          [test[0], 44],
-          [tefdgst[0], 12],
-        ]);
+      {%for disiplina in disiplinas%}
+        disc = '{{disiplina.nome}}'
+        data.addRows([[disc, i]])
+        i++
+      {%endfor%}
 
-        var options = {
-          title: 'Chess opening moves',
-          width: 900,
-          legend: { position: 'none' },
-          chart: { subtitle: 'popularity by percentage' },
-          axes: {
-            x: {
-              0: { side: 'top', label: 'White to move'} // Top x-axis.
-            }
-          },
-          bar: { groupWidth: "90%" }
-        };
 
-        var chart = new google.charts.Bar(document.getElementById('top_x_div'));
-        // Convert the Classic options to Material options.
-        chart.draw(data, google.charts.Bar.convertOptions(options));
+      var options = {
+        chart: {
+          title: '',
+          subtitle: ''
+        },
+        width: 900,
+        height: 500,
+        axes: {
+          x: {
+            0: {side: 'top'}
+          }
+        }
       };
-    </script>
-  </head>
-  <body>
-    <div id="top_x_div" style="width: 900px; height: 500px;"></div>
-  </body>
+
+      var chart = new google.charts.Bar(document.getElementById('line_top_x'));
+
+      chart.draw(data, options);
+    }
+  </script>
+</head>
+<body>
+  <div id="line_top_x"></div>
+</body>
 </html>
