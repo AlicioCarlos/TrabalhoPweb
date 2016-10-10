@@ -18,8 +18,7 @@ class Professor(models.Model):
 
 class Disciplina(models.Model):
     nome = models.CharField(max_length=100)
-    professor = models.ForeignKey(Professor)
-    alunos = models.ManyToManyField(Aluno, through='Boletim')
+    cargaHoraria = models.FloatField()
 
     def __str__(self):
         return self.nome
