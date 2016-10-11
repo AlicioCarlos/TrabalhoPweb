@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from django.contrib.auth import logout
 from .models import Professor
 from .models import Aluno
 from .models import Boletim
@@ -10,7 +11,7 @@ from .tables import BoletimTable
 from .tables import AlunoTable
 import json
 
-
+@login_required
 def professor(request):
     professores = Professor.objects.all()
     turmas = Turma.objects.all()
@@ -25,7 +26,7 @@ def professor(request):
             return render(request, 'sistemaacademico/professor.html', {'turmasProfessor': turmasProfessor, 'matricula': matricula})
     return render(request, 'sistemaacademico/acessonegado.html')
 
-
+@login_required
 def aluno(request):
     alunos = Aluno.objects.all()
     boletins = Boletim.objects.all()
@@ -40,7 +41,7 @@ def aluno(request):
             return render(request, 'sistemaacademico/aluno.html', {'boletimAluno': boletimAluno, 'matricula': matricula})
     return render(request, 'sistemaacademico/acessonegado.html')
 
-
+@login_required
 def boletimDoAluno(request):
     alunos = Aluno.objects.all()
     alunologado = request.user
@@ -52,7 +53,7 @@ def boletimDoAluno(request):
     table = BoletimTable(boletimAluno.all())
     return render(request, 'sistemaacademico/boletim.html', {'table':table})
 
-
+@login_required
 def historicoDoAluno(request):
     alunos = Aluno.objects.all()
     boletins = Boletim.objects.all()
@@ -65,12 +66,13 @@ def historicoDoAluno(request):
                     historico[boletins[i].disciplina.nome] = boletins[i].media
     return render(request, 'sistemaacademico/historico.html', {'historico':historico})
 
-
+@login_required
 def disciplinas(request, pk):
     disciplinas = Disciplina.objects.get(pk=pk)
     table = AlunoTable(disciplinas.alunos.all())
     return render(request, 'sistemaacademico/disciplinas.html', {'table' : table, 'disciplinaNome': disciplinas.nome})
 
+@login_required
 def graficoDesenpenho(request):
     boletins = Boletim.objects.all()
     disiplinas = Disciplina.objects.all()
@@ -91,7 +93,16 @@ def acessonegado(request):
 
 @login_required
 def index(request):
-        return render(request, 'sistemaacademico/index.html', {})
+    if Professor.objects.get(nome=request.user.username):
+        return render(request, 'sistemaacademico/professor.html')
+    return render(request, 'sistemaacademico/aluno.html')
+
+
+
+
+
+
+
 
 """""
 def index(request):
