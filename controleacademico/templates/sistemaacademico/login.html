@@ -1,48 +1,40 @@
+{% extends "sistemaacademico/base.html" %}
 {% load static %}
-<html lang="en">
 
-    <head>
-
-        <title>Controle Acadêmico</title>
-
-        <link rel="stylesheet" type="text/css" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
-        <link href="{% static 'django_tables2/bootstrap.css' %}" rel="stylesheet" />
-
-
-        <style type="text/css">
-            pre {
-                background-color: #D8F0FF;
-                border: 1px solid #9BBBD5;
-                padding: 8px;
-            }
-        </style>
-
-    </head>
 
 {% block body %}
-<!--login modal-->
-<div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h1 class="text-center">Login</h1>
-        </div>
-        <div class="modal-body">
-            <form class="form col-md-12 center-block" method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    {{ campo.label_tag}}
-                    {{form.username.label_tag}}{{form.username}}
-                    {{form.password.label_tag}}{{form.password}}
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-primary btn-lg btn-block" type="submit">Logar</button>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
+<div class="clear" style="margin-top: 10px;"></div>
+<div>
+    <div>
 
-        </div>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" style="margin-right: 5px;">LOGIN</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div>
+        <form class="form col-md-12 center-block" method="post">
+            {% csrf_token %}
+            <div class="form-group inline-group">
+                {{ campo.label_tag}}
+                <div>
+                    {{form.username.label_tag}}
+                    <div class="clear" ></div>
+                    {{form.username}}
+                </div>
+                <div style="margin-top: 10px;">
+                    {{form.password.label_tag}}
+                    <div class="clear" ></div>
+                    {{form.password}}
+                </div>
+            </div>
+            <div class="form-group" style="margin-top: 10px;">
+                <button class="btn" type="submit">ENTRAR</button>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}

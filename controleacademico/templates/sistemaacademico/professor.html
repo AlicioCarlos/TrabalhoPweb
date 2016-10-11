@@ -12,10 +12,14 @@
                 <div class="navbar-header">
                     <a class="navbar-brand" style="margin-right: 5px;" href="{% url 'index' %}">HOME</a>
                     <a class="navbar-brand" style="margin-right: 20px;">|</a>
-                    <a class="navbar-brand" style="margin-right: 20px;" href="#">PLANILHAS</a>
-                    <a class="navbar-brand" style="margin-right: 20px;" href="{% url 'graficoDesenpenho' %}">GRÁFICO DE DESENPENHO</a>
-
                 </div>
+                <ul class="nav navbar-nav">
+                  <li><a class="navbar-brand" style="margin-right: 20px;" href="#">PLANILHAS</a></li>
+                  <li><a class="navbar-brand" style="margin-right: 20px;" href="{% url 'graficoDesenpenho' %}">GRÁFICO DE DESENPENHO</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                  <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                </ul>
             </div>
         </nav>
 
