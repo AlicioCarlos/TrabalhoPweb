@@ -48,3 +48,6 @@ class Boletim(models.Model):
 
     def media(self):
         return (self.nota1 + self.nota2 + self.nota3)/3
+
+    def boletim_json(self):
+        return {'aluno': str(self.aluno), 'turma': str(self.turma), 'nota1': self.nota1,'nota2': self.nota2,'nota3': self.nota3}

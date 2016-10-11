@@ -1,6 +1,5 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from django.contrib.auth import logout
 from .models import Professor
 from .models import Aluno
 from .models import Boletim
@@ -9,7 +8,8 @@ from .models import Disciplina
 from .tables import ProfessorTable
 from .tables import BoletimTable
 from .tables import AlunoTable
-import json
+from django.http import HttpResponse
+from .testexls import WriteToExcel
 
 @login_required
 def professor(request):
@@ -93,11 +93,19 @@ def acessonegado(request):
 
 @login_required
 def index(request):
-    if Professor.objects.get(nome=request.user.username):
+    if Professor.objects.filter(nome=request.user):
         return render(request, 'sistemaacademico/professor.html')
     return render(request, 'sistemaacademico/aluno.html')
 
-
+@login_required
+def relatorio_boletim_xls(request):
+    boletins = Boletim.objects.filter(aluno__nome=request.user)
+    report = [boletim.boletim_json() for boletim in boletins]
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=Report.xlsx'
+    xlsx_data = WriteToExcel(report)
+    response.write(xlsx_data)
+    return response
 
 
 
