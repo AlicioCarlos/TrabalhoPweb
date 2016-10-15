@@ -101,7 +101,7 @@ def relatorio_boletim_xls(request):
     response = HttpResponse(content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=Report.xlsx'
     xlsx_data = WriteToExcel(report, Aluno.objects.get(nome=request.user),
-                             PeriodoLetivo.objects.last(), "BOLETIM")
+                             PeriodoLetivo.objects.last().nome, "BOLETIM")
     response.write(xlsx_data)
     return response
 
@@ -111,7 +111,7 @@ def relatorio_Historico_xls(request):
     report = [boletim.boletim_json() for boletim in boletins]
     response = HttpResponse(content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=Report.xlsx'
-    xlsx_data = WriteToExcel(report, Aluno.objects.get(nome=request.user), '', "HISTÓRICO")
+    xlsx_data = WriteToExcel(report, Aluno.objects.get(nome=request.user), "", "HISTÓRICO")
     response.write(xlsx_data)
     return response
 

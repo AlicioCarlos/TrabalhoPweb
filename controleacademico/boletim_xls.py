@@ -13,10 +13,10 @@ def WriteToExcel(data, aluno, periodoLetivo, tipo):
 
     # excel styles
 
-    title_text = ugettext('RELATÓRIO' + ' - ' + tipo)
+    title_text = ugettext('RELATÓRIO' + ' - ' + tipo + " " + periodoLetivo)
     subTitle_text = ugettext('ALUNO: ' + aluno.nome)
     # merge cells
-    worksheet_s.merge_range('D2:E2', title_text)
+    worksheet_s.merge_range('D2:F2', title_text)
     worksheet_s.merge_range('B4:C4', subTitle_text)
 
     # write header
