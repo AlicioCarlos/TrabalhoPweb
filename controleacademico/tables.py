@@ -32,4 +32,4 @@ class TurmaTable(tables.Table):
 class BoletimTable(tables.Table):
     class Meta:
         model = Boletim
-        exclude = ('id',)
+        exclude = ('id','aluno')

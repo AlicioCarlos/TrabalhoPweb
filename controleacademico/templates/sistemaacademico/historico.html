@@ -15,7 +15,7 @@
                     <a class="navbar-brand" style="margin-right: 20px;">|</a>
                 </div>
                 <ul class="nav navbar-nav">
-                  <li><a class="navbar-brand" style="margin-right: 20px;" href="{% url 'aluno' %}">VOLTAR</a></li>
+                  <li><a class="navbar-brand" style="margin-right: 20px;" href="{% url 'relatorio_Historico_xls' %}">EXPORTAR XLS</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                   <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
@@ -23,17 +23,14 @@
             </div>
         </nav>
 
-        <div style="margin-left: 30px;">
-            <h2>HISTÓRICO:</h2>
-            <div class="clear" style="margin-top: 10px;"></div>
-            <h2>Disciplinas Cursadas:</h2>
-            <div class="clear"></div>
-            {% for key, value in historico.items %}
-                <div style="margin-left: 10px;">
-                    <h3><p>{{ key }}</p></h3>
-                    <h4><p>Média: {{ value }}</p></h4>
-                </div>
-            {% endfor %}
+        <div class="=clear"></div>
+
+        <div class="container-fluid" style="margin-left: 20px;">
+            <p><h2>Disciplinas:</h2></p>
+            <div style="margin-top: 10px;">
+                {% render_table table "django_tables2/bootstrap.html" %}
+            </div>
+            <div class="=clear"></div>
         </div>
 
     </div>

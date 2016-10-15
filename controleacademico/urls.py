@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'disciplinas/(?P<pk>\d+)/$', views.disciplinas,  name='disciplinas'),
     url(r'acessonegado/', views.acessonegado, name='acessonegado'),
     url(r'relatorio_boletim_xls/$', views.relatorio_boletim_xls, name='relatorio_boletim_xls'),
+    url(r'relatorio_Historico_xls/$', views.relatorio_Historico_xls, name='relatorio_Historico_xls'),
 
 
     #url(r'turma/', views.turma, name='turma'),

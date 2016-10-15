@@ -1,15 +1,17 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from django.http import HttpResponse
+from .boletim_xls import WriteToExcel
 from .models import Professor
 from .models import Aluno
 from .models import Boletim
 from .models import Turma
 from .models import Disciplina
+from .models import PeriodoLetivo
 from .tables import ProfessorTable
 from .tables import BoletimTable
 from .tables import AlunoTable
-from django.http import HttpResponse
-from .testexls import WriteToExcel
+
 
 @login_required
 def professor(request):
@@ -28,49 +30,35 @@ def professor(request):
 
 @login_required
 def aluno(request):
-    alunos = Aluno.objects.all()
-    boletins = Boletim.objects.all()
     alunologado = request.user
-    boletimAluno = []
-    for aluno in alunos:
-        if aluno.user == alunologado:
-            matricula = aluno.matricula
-            for i in range(len(boletins)):
-                if boletins[i].aluno.user == alunologado:
-                    boletimAluno.append(boletins[i])
-            return render(request, 'sistemaacademico/aluno.html', {'boletimAluno': boletimAluno, 'matricula': matricula})
-    return render(request, 'sistemaacademico/acessonegado.html')
+    aluno = Aluno.objects.get(nome=alunologado)
+    periodoLetivo = PeriodoLetivo.objects.last()
+    turmas = Turma.objects.filter(alunos__nome=alunologado, periodoLetivo__nome=PeriodoLetivo.objects.last())
+    return render(request, 'sistemaacademico/aluno.html', {'turmas': turmas, 'aluno': aluno, 'periodoLetivo': periodoLetivo})
+
 
 @login_required
 def boletimDoAluno(request):
-    alunos = Aluno.objects.all()
-    alunologado = request.user
-    alunoPK = ""
-    for aluno in alunos:
-        if aluno.user == alunologado:
-            alunoPK  = aluno.pk
-    boletimAluno = Boletim.objects.filter(aluno = alunoPK)
-    table = BoletimTable(boletimAluno.all())
+    aluno = Aluno.objects.filter(nome=request.user)
+    boletimAluno = Boletim.objects.filter(aluno=aluno, turma__periodoLetivo__nome=PeriodoLetivo.objects.last())
+    table = BoletimTable(boletimAluno)
     return render(request, 'sistemaacademico/boletim.html', {'table':table})
+
 
 @login_required
 def historicoDoAluno(request):
-    alunos = Aluno.objects.all()
-    boletins = Boletim.objects.all()
-    alunologado = request.user
-    historico = {}
-    for aluno in alunos:
-        if aluno.user == alunologado:
-            for i in range(len(boletins)):
-                if boletins[i].aluno.user == alunologado:
-                    historico[boletins[i].disciplina.nome] = boletins[i].media
-    return render(request, 'sistemaacademico/historico.html', {'historico':historico})
+    aluno = Aluno.objects.filter(nome=request.user)
+    boletimAluno = Boletim.objects.filter(aluno=aluno).order_by('-semestre')
+    table = BoletimTable(boletimAluno)
+    return render(request, 'sistemaacademico/historico.html', {'table':table})
+
 
 @login_required
 def disciplinas(request, pk):
     disciplinas = Disciplina.objects.get(pk=pk)
     table = AlunoTable(disciplinas.alunos.all())
     return render(request, 'sistemaacademico/disciplinas.html', {'table' : table, 'disciplinaNome': disciplinas.nome})
+
 
 @login_required
 def graficoDesenpenho(request):
@@ -91,22 +79,41 @@ def graficoDesenpenho(request):
 def acessonegado(request):
     return render(request, 'sistemaacademico/acessonegado.html')
 
+
 @login_required
 def index(request):
-    if Professor.objects.filter(nome=request.user):
+    alunologado = request.user
+
+    if Professor.objects.filter(nome=alunologado):
         return render(request, 'sistemaacademico/professor.html')
-    return render(request, 'sistemaacademico/aluno.html')
+
+    if Aluno.objects.filter(nome=alunologado):
+        aluno = Aluno.objects.get(nome=alunologado)
+        periodoLetivo = PeriodoLetivo.objects.last()
+        turmas = Turma.objects.filter(alunos__nome=alunologado, periodoLetivo__nome=PeriodoLetivo.objects.last())
+        return render(request, 'sistemaacademico/aluno.html', {'turmas': turmas, 'aluno': aluno, 'periodoLetivo':periodoLetivo })
+
 
 @login_required
 def relatorio_boletim_xls(request):
+    boletins = Boletim.objects.filter(aluno__nome=request.user).filter(semestre=PeriodoLetivo.objects.count())
+    report = [boletim.boletim_json() for boletim in boletins]
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=Report.xlsx'
+    xlsx_data = WriteToExcel(report, Aluno.objects.get(nome=request.user),
+                             PeriodoLetivo.objects.last(), "BOLETIM")
+    response.write(xlsx_data)
+    return response
+
+@login_required
+def relatorio_Historico_xls(request):
     boletins = Boletim.objects.filter(aluno__nome=request.user)
     report = [boletim.boletim_json() for boletim in boletins]
     response = HttpResponse(content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=Report.xlsx'
-    xlsx_data = WriteToExcel(report)
+    xlsx_data = WriteToExcel(report, Aluno.objects.get(nome=request.user), '', "HISTÓRICO")
     response.write(xlsx_data)
     return response
-
 
 
 
@@ -132,5 +139,12 @@ def turmaDetalhes(request, prof_mat):
     except Turma.DoesNotExist:
         raise Http404("Turma não Localizada!!")
     return render(request, 'turmaDetalhes.html', {'table': table})
+
+    {% for key, value in historico.items %}
+                <div style="margin-left: 10px;">
+                    <h3><p>{{ key }}</p></h3>
+                    <h4><p>Média: {{ value }}</p></h4>
+                </div>
+            {% endfor %}
 
 """

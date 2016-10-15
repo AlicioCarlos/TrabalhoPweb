@@ -18,7 +18,8 @@
                   <li><a class="navbar-brand nav right"  href="{% url 'historico' %}">HISTÓRICO</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                  <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                    <li><a>{{ aluno.nome }}</a></li>
+                    <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
                 </ul>
             </div>
         </nav>
@@ -27,14 +28,14 @@
     <div class="=clear"></div>
 
     <div style="margin-left: 30px;">
-        <h2>Matrícula: {{ matricula }}</h2>
+        <h2>Matrícula: {{ aluno.matricula }}</h2>
         <div class="clear" style="margin-top: 10px;"></div>
         <h2>Disciplinas matriculadas:</h2>
         <div class="clear" style="margin-top: 10px;"></div>
-        {% for boletim in boletimAluno %}
+        {% for turma in turmas %}
             <div style="margin-left: 20px;">
-                <h3><p>{{ boletim.disciplina }}</p></h3>
-                <h4><p>Professor: {{ boletim.disciplina.professor }}</p></h4>
+                <h3><p>{{ turma.disciplina.nome }} {{ turma.nome }}</p></h3>
+                <h4><p>Professor: {{ turma.professor.nome }}</p></h4>
             </div>
         {% endfor %}
     </div>
