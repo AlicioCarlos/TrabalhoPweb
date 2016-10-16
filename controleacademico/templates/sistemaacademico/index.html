@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "sistemaacademico/base.html" %}
 {% load static %}
 
 {% block body %}
@@ -13,6 +13,9 @@
                 <a class="navbar-brand" style=" margin-right: 20px;" href="{% url 'professor' %}">PROFESSOR</a>
                 <a class="navbar-brand" style=" margin-right: 20px;" href="{% url 'aluno' %}">ALUNO</a>
             </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+            </ul>
         </div>
     </nav>
 
@@ -24,21 +27,3 @@
 </div>
 
 {% endblock %}
-
-
-
-
-<!--
-{% if professor_list %}
-    <ul>
-    {% for professor in professor_list %}
-        <li>
-            <a>{{ professor.matricula }}</a>
-            <a href="/home/turmaDetalhes/{{ professor.id }}/">{{ professor.nome }}</a>
-        </li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Nenhum Professor localizado!</p>
-{% endif %}
--->

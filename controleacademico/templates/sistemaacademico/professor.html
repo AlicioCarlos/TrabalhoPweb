@@ -1,0 +1,50 @@
+{% extends "sistemaacademico/base.html" %}
+{% load static %}
+
+{% block body %}
+
+<div class="clear" style="margin-top: 10px;"></div>
+
+    <div>
+
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" style="margin-right: 5px;" href="{% url 'index' %}">HOME</a>
+                    <a class="navbar-brand" style="margin-right: 20px;">|</a>
+                </div>
+                <ul class="nav navbar-nav">
+                  <li><a class="navbar-brand" style="margin-right: 20px;" href="{% url 'graficoDesenpenho' %}">GRÁFICO DE DESENPENHO</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a>{{ professor.nome }}</a></li>
+                  <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                </ul>
+            </div>
+        </nav>
+
+    <div style="margin-left: 30px;">
+        <h2>Matrícula: {{ professor.matricula }}</h2>
+        <div class="clear" style="margin-top: 10px;"></div>
+        <h2>Turmas:</h2>
+        <div class="clear" style="margin-top: 10px;"></div>
+        <h4><p>Período Letivo: {{ periodoLetivo.nome }}</p></h4>
+        {% for turma in turmas %}
+            <div style="margin-left: 20px;">
+                <h3>
+                    <p>
+                        <a href="{% url 'turmaDetalhes' pk=turma.pk %}">
+                            {{ turma.nome }}
+                        </a>
+                    </p>
+                </h3>
+                <h4><p>Disciplina: {{ turma.disciplina.nome }}</p></h4>
+                <h4><p>Carga Horária: {{ turma.disciplina.cargaHoraria }}</p></h4>
+            </div>
+        {% endfor %}
+    </div>
+
+    </div>
+
+{% endblock %}
+

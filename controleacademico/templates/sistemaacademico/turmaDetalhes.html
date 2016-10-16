@@ -1,0 +1,37 @@
+{% extends "sistemaacademico/base.html" %}
+{% load django_tables2 %}
+{% load static %}
+
+{% block body %}
+
+<div class="clear" style="margin-top: 10px;"></div>
+
+    <div>
+
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" style="margin-right: 5px;" href="{% url 'index' %}">HOME</a>
+                    <a class="navbar-brand" style="margin-right: 20px;">|</a>
+                </div>
+                <ul class="nav navbar-nav">
+                  <li><a class="navbar-brand" style="margin-right: 20px;" href="{% url 'relatorio_alunos_turma_xls' pk=turma_id%}">EXPORTAR XLS</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="=clear"></div>
+
+    <div class="container-fluid" style="margin-left: 10px;">
+        <p><h2>Alunos Matriculados:</h2></p>
+        <div style="margin-top: 10px;">
+                {% render_table table "django_tables2/bootstrap.html" %}
+            </div>
+    </div>
+
+    </div>
+
+{% endblock %}

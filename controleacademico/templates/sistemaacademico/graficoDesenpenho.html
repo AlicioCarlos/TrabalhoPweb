@@ -1,0 +1,60 @@
+{% extends "sistemaacademico/base.html" %}
+{% load static %}
+
+{% block body %}
+        <div>
+
+        <nav class="navbar navbar-inverse ">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" style="margin-right: 5px;" href="{% url 'index' %}">HOME</a>
+                    <a class="navbar-brand" style="margin-right: 20px;">|</a>
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                  <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                </ul>
+            </div>
+        </nav>
+
+    </div>
+
+    <div class="container">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+              google.charts.load('current', {'packages':['bar']});
+              google.charts.setOnLoadCallback(drawStuff);
+
+            function drawStuff() {
+
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Turmas');
+                data.addColumn('number', 'Média das Notas');
+
+                var disc = ""
+                var sdas = {{ mediaTurma }}
+                var i = 0
+
+                {%for dasdas in desenpenhoTurma%}
+                    data.addRows([['{{dasdas}}', sdas[i]]])
+                    i++
+                {%endfor%}
+
+
+                var options = {
+                    chart: { title: 'Gráfico de Desempenho', subtitle: 'Período Letivo: {{ periodoLetivo }}'},
+                    width: 720,
+                    height: 400,
+                    axes: { x: { 0: {side: 'top'} }}
+                };
+
+                var chart = new google.charts.Bar(document.getElementById('line_top_x'));
+
+                chart.draw(data, options);
+            }
+        </script>
+        <body>
+          <div id="line_top_x"></div>
+        </body>
+    </div>
+{% endblock %}
