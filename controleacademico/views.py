@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponse
-from .boletim_xls import WriteToExcel
+from .report_xls import WriteToExcel
 from .models import Professor
 from .models import Aluno
 from .models import Boletim
@@ -73,10 +73,6 @@ def graficoDesenpenho(request):
                   {'desenpenhoTurma': desenpenhoTurma, 'mediaTurma':mediaTurma, 'periodoLetivo': PeriodoLetivo.objects.last()})
 
 
-def acessonegado(request):
-    return render(request, 'sistemaacademico/acessonegado.html')
-
-
 @login_required
 def index(request):
     usuarioLogado = request.user
@@ -121,6 +117,7 @@ def relatorio_boletim_xls(request):
                              ('ALUNO: '+Aluno.objects.get(nome=request.user).nome))
     response.write(xlsx_data)
     return response
+
 
 @login_required
 def relatorio_Historico_xls(request):

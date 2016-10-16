@@ -5,6 +5,7 @@ from .models import Boletim
 from .models import Turma
 from .models import Disciplina
 
+
 class ProfessorTable(tables.Table):
      class Meta:
         model = Professor
