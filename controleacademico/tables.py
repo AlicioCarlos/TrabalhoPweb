@@ -33,3 +33,9 @@ class BoletimTable(tables.Table):
     class Meta:
         model = Boletim
         exclude = ('id','aluno')
+
+
+class AlunosTurmaTable(tables.Table):
+    class Meta:
+        model = Boletim
+        exclude = ('id','turma','semestre')

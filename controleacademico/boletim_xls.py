@@ -3,18 +3,18 @@ import io
 from django.utils.translation import ugettext
 import string
 
-def WriteToExcel(data, aluno, periodoLetivo, tipo):
+def WriteToExcel(data, keysColunas, tipoRelatorio, subTitle, cabecalho):
     output = io.BytesIO()
     workbook = xlsxwriter.Workbook(output)
     worksheet_s = workbook.add_worksheet("Summary")
-    keys = ['turma', 'disciplina',  'nota1', 'nota2', 'nota3', 'media']
+    keys = keysColunas
 
     description_col_width = 5
 
     # excel styles
 
-    title_text = ugettext('RELATÓRIO' + ' - ' + tipo + " " + periodoLetivo)
-    subTitle_text = ugettext('ALUNO: ' + aluno.nome)
+    title_text = ugettext('RELATÓRIO' + ' - ' + tipoRelatorio + " " + subTitle)
+    subTitle_text = ugettext(cabecalho)
     # merge cells
     worksheet_s.merge_range('D2:F2', title_text)
     worksheet_s.merge_range('B4:C4', subTitle_text)

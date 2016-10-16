@@ -8,25 +8,18 @@ from .models import Boletim
 from .models import Turma
 from .models import Disciplina
 from .models import PeriodoLetivo
-from .tables import ProfessorTable
 from .tables import BoletimTable
-from .tables import AlunoTable
+from .tables import AlunosTurmaTable
 
 
 @login_required
 def professor(request):
-    professores = Professor.objects.all()
-    turmas = Turma.objects.all()
-    profesorlogado = request.user
-    turmasProfessor = []
-    for professor in professores:
-        if professor.user == request.user:
-            matricula = professor.matricula
-            for i in range(len(turmas)):
-                if turmas[i].professor.user == profesorlogado:
-                    turmasProfessor.append(turmas[i])
-            return render(request, 'sistemaacademico/professor.html', {'turmasProfessor': turmasProfessor, 'matricula': matricula})
-    return render(request, 'sistemaacademico/acessonegado.html')
+    usuarioLogado = request.user
+    professor = Professor.objects.get(nome=usuarioLogado)
+    periodoLetivo = PeriodoLetivo.objects.last()
+    turmas = Turma.objects.filter(professor__nome=usuarioLogado, periodoLetivo__nome=periodoLetivo)
+    return render(request, 'sistemaacademico/professor.html',
+                  {'turmas': turmas, 'professor': professor, 'periodoLetivo': periodoLetivo})
 
 @login_required
 def aluno(request):
@@ -54,10 +47,10 @@ def historicoDoAluno(request):
 
 
 @login_required
-def disciplinas(request, pk):
-    disciplinas = Disciplina.objects.get(pk=pk)
-    table = AlunoTable(disciplinas.alunos.all())
-    return render(request, 'sistemaacademico/disciplinas.html', {'table' : table, 'disciplinaNome': disciplinas.nome})
+def turmaDetalhes(request, pk):
+    boletins = Boletim.objects.filter(turma_id=pk)
+    table = AlunosTurmaTable(boletins)
+    return render(request, 'sistemaacademico/turmaDetalhes.html', {'table': table, 'turma_id': pk})
 
 
 @login_required
@@ -82,36 +75,58 @@ def acessonegado(request):
 
 @login_required
 def index(request):
-    alunologado = request.user
+    usuarioLogado = request.user
 
-    if Professor.objects.filter(nome=alunologado):
-        return render(request, 'sistemaacademico/professor.html')
-
-    if Aluno.objects.filter(nome=alunologado):
-        aluno = Aluno.objects.get(nome=alunologado)
+    if Professor.objects.filter(nome=usuarioLogado):
+        professor = Professor.objects.get(nome=usuarioLogado)
         periodoLetivo = PeriodoLetivo.objects.last()
-        turmas = Turma.objects.filter(alunos__nome=alunologado, periodoLetivo__nome=PeriodoLetivo.objects.last())
-        return render(request, 'sistemaacademico/aluno.html', {'turmas': turmas, 'aluno': aluno, 'periodoLetivo':periodoLetivo })
+        turmas = Turma.objects.filter(professor__nome=usuarioLogado, periodoLetivo__nome=periodoLetivo)
+        return render(request, 'sistemaacademico/professor.html',
+                      {'turmas': turmas, 'professor': professor, 'periodoLetivo':periodoLetivo})
+
+    if Aluno.objects.filter(nome=usuarioLogado):
+        aluno = Aluno.objects.get(nome=usuarioLogado)
+        periodoLetivo = PeriodoLetivo.objects.last()
+        turmas = Turma.objects.filter(alunos__nome=usuarioLogado, periodoLetivo__nome=periodoLetivo)
+        return render(request, 'sistemaacademico/aluno.html',
+                      {'turmas': turmas, 'aluno': aluno, 'periodoLetivo':periodoLetivo})
+
+
+@login_required
+def relatorio_alunos_turma_xls(request, pk):
+    turma = Turma.objects.get(pk=pk)
+    boletins = Boletim.objects.filter(turma_id=pk)
+    report = [boletim.boletimProfessor_json() for boletim in boletins]
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=Report.xlsx'
+    keysColunas = ['aluno', 'nota1', 'nota2', 'nota3', 'media']
+    xlsx_data = WriteToExcel(report, keysColunas, "TURMA", turma.nome,
+                             ('PROFESSOR: ' + Professor.objects.get(nome=request.user).nome.upper()))
+    response.write(xlsx_data)
+    return response
 
 
 @login_required
 def relatorio_boletim_xls(request):
-    boletins = Boletim.objects.filter(aluno__nome=request.user).filter(semestre=PeriodoLetivo.objects.count())
-    report = [boletim.boletim_json() for boletim in boletins]
+    boletins = Boletim.objects.filter(aluno__nome=request.user).filter(turma__periodoLetivo=PeriodoLetivo.objects.last())
+    report = [boletim.boletimAluno_json() for boletim in boletins]
     response = HttpResponse(content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=Report.xlsx'
-    xlsx_data = WriteToExcel(report, Aluno.objects.get(nome=request.user),
-                             PeriodoLetivo.objects.last().nome, "BOLETIM")
+    keysColunas = ['disciplina', 'turma', 'nota1', 'nota2', 'nota3', 'media']
+    xlsx_data = WriteToExcel(report, keysColunas,"BOLETIM", PeriodoLetivo.objects.last().nome,
+                             ('ALUNO: '+Aluno.objects.get(nome=request.user).nome))
     response.write(xlsx_data)
     return response
 
 @login_required
 def relatorio_Historico_xls(request):
     boletins = Boletim.objects.filter(aluno__nome=request.user)
-    report = [boletim.boletim_json() for boletim in boletins]
+    report = [boletim.boletimAluno_json() for boletim in boletins]
     response = HttpResponse(content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=Report.xlsx'
-    xlsx_data = WriteToExcel(report, Aluno.objects.get(nome=request.user), "", "HISTÓRICO")
+    keysColunas = ['disciplina', 'turma','nota1', 'nota2', 'nota3', 'media']
+    xlsx_data = WriteToExcel(report, keysColunas, "HISTÓRICO",  "",
+                             ('ALUNO: '+Aluno.objects.get(nome=request.user).nome))
     response.write(xlsx_data)
     return response
 
