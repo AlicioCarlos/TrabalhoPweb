@@ -10,10 +10,6 @@
                     <a class="navbar-brand" style="margin-right: 5px;" href="{% url 'index' %}">HOME</a>
                     <a class="navbar-brand" style="margin-right: 20px;">|</a>
                 </div>
-                <ul class="nav navbar-nav">
-                  <li><a class="navbar-brand" style="margin-right: 20px;" href="{% url 'boletim' %}">BOLETIM</a></li>
-                  <li><a class="navbar-brand nav right"  href="{% url 'historico' %}">HISTÓRICO</a></li>
-                </ul>
                 <ul class="nav navbar-nav navbar-right">
                   <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
                 </ul>
@@ -23,7 +19,6 @@
     </div>
 
     <div class="container">
-        <h3>Gráfico de Desempenho</h3>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
@@ -32,29 +27,30 @@
 
             function drawStuff() {
 
-              var data = new google.visualization.DataTable();
-              data.addColumn('string', 'Disciplinas');
-              data.addColumn('number', 'Média das Notas');
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Turmas');
+                data.addColumn('number', 'Média das Notas');
 
-              var disc = ""
-              var i = 0
+                var disc = ""
+                var sdas = {{ mediaTurma }}
+                var i = 0
 
-              {%for disiplina in disiplinas%}
-                data.addRows([['{{disiplina.nome}}', i]])
-                i++
-              {%endfor%}
+                {%for dasdas in desenpenhoTurma%}
+                    data.addRows([['{{dasdas}}', sdas[i]]])
+                    i++
+                {%endfor%}
 
 
-              var options = {
-                chart: { title: '', subtitle: ''},
-                width: 900,
-                height: 500,
-                axes: { x: { 0: {side: 'top'} }}
-              };
+                var options = {
+                    chart: { title: 'Gráfico de Desempenho', subtitle: 'Período Letivo: {{ periodoLetivo }}'},
+                    width: 720,
+                    height: 400,
+                    axes: { x: { 0: {side: 'top'} }}
+                };
 
-              var chart = new google.charts.Bar(document.getElementById('line_top_x'));
+                var chart = new google.charts.Bar(document.getElementById('line_top_x'));
 
-              chart.draw(data, options);
+                chart.draw(data, options);
             }
         </script>
         <body>

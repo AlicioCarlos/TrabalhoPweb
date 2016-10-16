@@ -57,7 +57,7 @@ class Boletim(models.Model):
         return str(self.aluno) + " " + str(self.turma)
 
     def media(self):
-        return (self.nota1 + self.nota2 + self.nota3)/3
+        return ((self.nota1 + self.nota2 + self.nota3)/3)
 
     def boletimAluno_json(self):
         return {'disciplina': str(self.turma.disciplina.nome).upper(),
